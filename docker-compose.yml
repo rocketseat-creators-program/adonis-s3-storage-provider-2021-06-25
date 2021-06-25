@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    container_name: adonisjs-upload-s3-presigned
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=adonisjs-api-upload-s3
+    ports:
+      - '5432:5432'
