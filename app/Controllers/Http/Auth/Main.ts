@@ -12,6 +12,8 @@ export default class MainsController {
 
       const user = token.user
 
+      await user.load('avatar')
+
       return { ...token.toJSON(), user }
     } catch (error) {
       return response.badRequest('Invalid credentials')
