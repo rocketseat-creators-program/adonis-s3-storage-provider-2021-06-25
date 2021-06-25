@@ -1,0 +1,1 @@
+- Criação de estrutura de pasta tpm/uploads, para disk local.
