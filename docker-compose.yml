@@ -3,7 +3,7 @@ version: '3.9'
 services:
   db:
     image: postgres
-    container_name: adonisjs-upload-s3-presigned
+    container_name: adonisjs-upload-api
     restart: always
     environment:
       - POSTGRES_USER=postgres
