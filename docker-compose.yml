@@ -8,6 +8,6 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=adonisjs-api-upload-s3
+      - POSTGRES_DB=adonisjs-upload-s3
     ports:
       - '5432:5432'
