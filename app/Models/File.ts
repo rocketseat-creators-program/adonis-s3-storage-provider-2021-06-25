@@ -1,4 +1,6 @@
 import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import StorageProvider from '@ioc:ExpertsClub/StorageProvider'
+
 import { FileCategory } from 'App/Utils'
 import uploadConfig from 'Config/upload'
 
@@ -27,6 +29,9 @@ export default class File extends BaseModel {
     if (uploadConfig.driver === 'disk')
       return `${uploadConfig.config.disk.url}/${uploadConfig.config.disk.folder}/${this.fileName}`
 
-    return this.fileName
+    if (this.isPublic)
+      return `https://${uploadConfig.config.aws.bucket}.s3-${uploadConfig.config.aws.region}.amazonaws.com/${this.fileName}`
+
+    return StorageProvider.getFileSignature(this.fileName)
   }
 }

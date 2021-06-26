@@ -1,12 +1,11 @@
-import uploadConfig from 'Config/upload'
-import fs from 'fs'
 import sharp from 'sharp'
-import Application from '@ioc:Adonis/Core/Application'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import Database from '@ioc:Adonis/Lucid/Database'
+import StorageProvider from '@ioc:ExpertsClub/StorageProvider'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import { StoreValidator } from 'App/Validators/User/Avatar'
+import { ISaveFileDTO } from 'Contracts/interfaces/IStorageProvider'
 
 export default class UserAvatarController {
   public async update({ request, auth }: HttpContextContract) {
@@ -23,16 +22,23 @@ export default class UserAvatarController {
         fileName: `${cuid()}.${file.extname}`
       })
 
-      const resizedImageData = await sharp(file.tmpPath).resize(150, 150, {
+      const fileBuffer = await sharp(file.tmpPath).resize(150, 150, {
         fit: 'cover',
         position: 'center'
       }).toBuffer()
 
-      await fs.promises.writeFile(
-        `${Application.tmpPath(uploadConfig.config.disk.folder)}/${avatar.fileName}`, resizedImageData)
+      const fileSave: ISaveFileDTO = {
+        fileBuffer,
+        fileName: avatar.fileName,
+        fileType: file.type,
+        fileSubType: file.subtype,
+        isPublic: true
+      }
+
+      await StorageProvider.saveFile(fileSave)
 
       if (avatarIsExists)
-        fs.promises.unlink(Application.tmpPath(uploadConfig.config.disk.folder, avatarIsExists.fileName))
+        StorageProvider.deleteFile(avatarIsExists.fileName)
 
       return avatar
     })
