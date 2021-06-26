@@ -1,11 +1,12 @@
-import uploadConfig from 'Config/upload'
 import fs from 'fs'
-import Application from '@ioc:Adonis/Core/Application'
-import { cuid } from '@ioc:Adonis/Core/Helpers'
 import Database from '@ioc:Adonis/Lucid/Database'
+import StorageProvider from '@ioc:ExpertsClub/StorageProvider'
+import { cuid } from '@ioc:Adonis/Core/Helpers'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import { StoreValidator } from 'App/Validators/User/Certificate'
+import { ISaveFileDTO } from 'Contracts/interfaces/IStorageProvider'
+
 import Certificate from 'App/Models/Certificate'
 
 export default class CertificatesController {
@@ -34,11 +35,17 @@ export default class CertificatesController {
         fileName: `${cuid()}.${file.extname}`
       })
 
-      const buffer = await fs.promises.readFile(file.tmpPath || '')
+      const fileBuffer = await fs.promises.readFile(file.tmpPath || '')
 
-      await fs.promises.writeFile(
-        `${Application.tmpPath(uploadConfig.config.disk.folder)}/${fileCertificate.fileName}`,
-        buffer)
+      const fileSave: ISaveFileDTO = {
+        fileBuffer,
+        fileName: fileCertificate.fileName,
+        fileType: file.type,
+        fileSubType: file.subtype,
+        isPublic: false
+      }
+
+      await StorageProvider.saveFile(fileSave)
 
       return fileCertificate
     })

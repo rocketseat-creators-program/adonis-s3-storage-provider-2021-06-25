@@ -1,10 +1,17 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import { DiskStorageProvider, S3StorageProvider } from 'App/Services/StorageProvider'
+import upload from 'Config/upload'
 
 export default class AppProvider {
-  constructor(protected app: ApplicationContract) {}
+  constructor(protected app: ApplicationContract) { }
 
   public register() {
-    // Register your own bindings
+    const storageProvider = upload.driver == 'disk' ? new DiskStorageProvider() :
+      new S3StorageProvider
+
+    this.app.container.singleton('ExpertsClub/StorageProvider', () => {
+      return storageProvider
+    })
   }
 
   public async boot() {
