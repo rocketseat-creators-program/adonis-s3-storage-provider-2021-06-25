@@ -14,6 +14,6 @@ Após o envio vamos desenvolver o método para pré assinar uma URL para que os 
 
 | [<img src="https://avatars.githubusercontent.com/u/15224426?v=4?s=460&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4" width="75px;"/>](https://github.com/marcostaborda) |
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                                                             [marcostaborda](https://github.com/marcostabora)                                                             |
+|                                                             [Marcos Taborda](https://github.com/marcostabora)                                                             |
 
 TAGS: Adonis, Nodejs, TypeScript, API
